@@ -3,6 +3,14 @@ from google.oauth2.service_account import Credentials
 import json
 import utils
 
+#This is a helper function to check if the word already existsin list
+def word_exists(words,word):
+    for existing_word in words:
+        if word == existing_word["word"]:
+            return True
+    return False
+
+
 #Function to read lexical error data from excel file, cleanse and transform it to JSON format
 def import_spelling_words(file_path):
     #Define google api permission
@@ -36,6 +44,10 @@ def import_spelling_words(file_path):
         wrong =parts[0].strip()
         correct = parts[1].strip()
 
+        #If this word already exists
+        if word_exists(words,correct):
+            continue
+
         #Dictionary to store words matching JSON format
         entry ={
             "word":correct,
@@ -51,10 +63,13 @@ def import_spelling_words(file_path):
     utils.save_data(words, "data/spelling.json")
     return len(words)
 
+
+
+
 if __name__ == "__main__":
     words_imported = import_spelling_words("credentials.json")
     print("words imported from worksheet are: " + str(words_imported))
-    
+
 
 
 
