@@ -2,3 +2,7 @@ anthropic
 python-dotenv
 colorama
 flask
+gtts
+gspread
+google-auth
+
