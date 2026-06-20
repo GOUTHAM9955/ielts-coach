@@ -67,6 +67,20 @@ def user_choice(counter):
     else:
         print("Enter a valid option: " + str(4-counter) +" chances left")
         return user_choice(counter)
+    
+#Claculating weights for words list so that we words with frequent errors will get more weightage
+def get_weights(words):
+    list_weights = []
+    for word in words:
+        if word["attempts"] == 0:
+            weight = 10
+        else:
+            weight = max(4, 10 - (word["correct"] / word["attempts"] * 10))
+        list_weights.append(weight)
+    return list_weights
+
+                
+            
 
 
 #Main function to run the spelling test
@@ -93,8 +107,9 @@ def run_quiz():
         #For audio style quiz
         if(quiz_option == "1"):
 
-            # To slect a random word for quiz until user is done with the quiz
-            entry = random.choice(words)
+            # To slect a random word for quiz until user is done with the quiz based on the calculated weights
+            weights = get_weights(words)
+            entry = random.choices(words, weights=weights, k=1)[0]
             random_index = words.index(entry)
 
             word = words[random_index]["word"]
