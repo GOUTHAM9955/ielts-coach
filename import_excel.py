@@ -11,6 +11,7 @@ def word_exists(words,word):
     return False
 
 
+
 #Function to read lexical error data from excel file, cleanse and transform it to JSON format
 def import_spelling_words(file_path):
     #Define google api permission
@@ -33,7 +34,7 @@ def import_spelling_words(file_path):
     rows = worksheet.col_values(1)
 
     # List to store words from worksheets
-    words = []
+    words = utils.load_data("data/spelling.json")
     for row in rows:
         #If row is empty skip it
         if row =="":
