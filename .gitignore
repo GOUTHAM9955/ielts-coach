@@ -1,0 +1,25 @@
+# API keys and secrets — NEVER commit these
+.env
+
+# Python clutter
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Mac clutter
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
