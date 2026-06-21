@@ -1,28 +1,34 @@
 import utils
+import import_excel
 import random
 from colorama import Fore, Style, init
 from gtts import gTTS
 import os
 from datetime import date
+import time
+
 
 #To initialize colorama for colorful texts
 init()
 
 #Function to play audio of a word using gTTS
 def play_audio(word):
+
+    #Check if the audio file already exists
+    file_name = word.replace("/", "_").replace(" ", "_") + ".mp3"
+    if os.path.exists("audio/"+file_name):
+        os.system('afplay "audio/'+file_name + '"')
+          
      
-     #Check if the audio file already exists
-     file_name = word.replace("/", "_").replace(" ", "_") + ".mp3"
-     if os.path.exists("audio/"+file_name):
-          os.system('afplay "audio/'+file_name + '"')
-     
-     else:
+    else:
         #To convert text to audio and save the file
         tts = gTTS(text=word, lang="en")
         tts.save("audio/"+ file_name)
 
         #To play the audio file using terminal 
         os.system('afplay "audio/'+file_name + '"')
+    
+    time.sleep(3)
 
 # This function validates if user entered spelling is correct
 def check_answer(user_answer, correct):
@@ -90,8 +96,11 @@ def run_quiz():
     words = utils.load_data("data/spelling.json")
 
     if len(words) == 0:
-        print("No words found to run the quiz! Please update the Vocabulary Googlesheets")
-        return
+            imported_word_count = import_excel.import_spelling_words("credentials.json")
+            if imported_word_count == 0:
+                print("No words found to run the quiz! Please update the Vocabulary Googlesheets")
+                return
+            words = utils.load_data("data/spelling.json")
     
     #Prompting to user choice for quiz type
     print("Welcome to Spelling Practise!")
@@ -134,9 +143,12 @@ def run_quiz():
 
         else:
             #For text style quiz
-            # To slect a random word for quiz until user is done with the quiz
-            entry = random.choice(words)
+
+            # To slect a random word for quiz until user is done with the quiz based on the calculated weights
+            weights = get_weights(words)
+            entry = random.choices(words, weights=weights, k=1)[0]
             random_index = words.index(entry)
+
             word = words[random_index]["word"]
             print("Here is the word we need to correct: "+ words[random_index]["wrong"])
             user_entered_spelling = input("Enter your spelling here - > ")
@@ -164,7 +176,10 @@ def run_quiz():
     if total > 0:
         print("Score: " + str(round(correct_count/total * 100)) + "%")
     else:
-        print("No words practiced.")    
+        print("No words practiced.")
+
+    # To save the sessions data for progress tracking when more than 10 words are practised
+    utils.save_sessions(total, correct_count, "spelling")
 
 
 if __name__ == "__main__":

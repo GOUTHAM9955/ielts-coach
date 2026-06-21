@@ -5,4 +5,5 @@ flask
 gtts
 gspread
 google-auth
+matplotlib
 
