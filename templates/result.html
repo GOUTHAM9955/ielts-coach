@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Result</title>
+  </head>
+  <body>
+    <h1>Result</h1>
+    {% if is_correct %}
+    <p style="color: green">Correct! Well done</p>
+    {% else %}
+    <p style="color: red">
+      Wrong! The correct spelling is: <strong>{{ correct_word}}</strong>
+    </p>
+    {% endif %}
+
+    <a href="/spelling/quiz?mode={{mode}}">Next Word</a>
+    <a href="/spelling/end_quiz">End Quiz</a>
+  </body>
+</html>

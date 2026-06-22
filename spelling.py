@@ -48,6 +48,16 @@ def check_answer(user_answer, correct):
         print(Fore.RED + "Wrong!" + Style.RESET_ALL)
         return False
 
+# Silent version of check_answer for web use - returns True or False without printing
+def check_answer_silent(user_answer, correct):
+    user_answer_lower = user_answer.lower().strip()
+    correct_lower = correct.lower().strip()
+    if user_answer_lower == correct_lower:
+        return True
+    else:
+        return False
+
+
 # To update the words status in json file
 def update_word(words,index,is_correct):
 

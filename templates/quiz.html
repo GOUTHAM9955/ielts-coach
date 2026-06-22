@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Spelling Quiz</title>
+  </head>
+  <body>
+    <h1>Spelling Quiz</h1>
+    <form action="/spelling/check" method="POST">
+      <p>Spell this word correctly: <strong>{{entry ["wrong"]}}</strong></p>
+      <input type="text" name="answer" placeholder="Type your answer here" />
+      <button type="submit">Check</button>
+    </form>
+  </body>
+</html>

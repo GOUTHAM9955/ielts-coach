@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Quiz Completed</title>
+  </head>
+  <body>
+    <h1>Quiz Completed!</h1>
+
+    <p>Words practised: {{total}}</p>
+    <p>Correct: {{correct}}</p>
+
+    {% if total>0 %}
+    <p>Socre: {{(correct/ total *100) | round}}%</p>
+    {% endif %}
+
+    <a href="/spelling">Practise Again</a>
+    <a href="/">Home</a>
+  </body>
+</html>
