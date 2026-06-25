@@ -20,6 +20,9 @@ env/
 .vscode/
 .idea/
 
+# Claude Code — personal local settings only (memory files ARE committed)
+.claude/settings.local.json
+
 # Distribution / packaging
 *.egg-info/
 dist/
