@@ -1,0 +1,32 @@
+# API keys and secrets — NEVER commit these
+.env
+credentials.json
+
+# Python clutter
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Mac clutter
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+
+# Claude Code — personal local settings only (memory files ARE committed)
+.claude/settings.local.json
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+
+#git
+.git/
