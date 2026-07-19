@@ -13,6 +13,16 @@
     <p>Socre: {{(correct/ total *100) | round}}%</p>
     {% endif %}
 
+    <form action="/spelling/clear_choice" method="POST">
+      <button type="submit" name="choice" value="current">
+        Clear current sessions data
+      </button>
+      <button type="submit" name="choice" value="all">
+        Clear all sessions data
+      </button>
+      <button type="submit" name="choice" value="keep">Keep it</button>
+    </form>
+
     <a href="/spelling">Practise Again</a>
     <a href="/">Home</a>
   </body>

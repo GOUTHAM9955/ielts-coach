@@ -4,7 +4,7 @@ import random
 from colorama import Fore, Style, init
 from gtts import gTTS
 import os
-from datetime import date
+from datetime import datetime, date
 import time
 
 
@@ -104,7 +104,7 @@ def run_quiz():
 
     #To load words from Json
     words = utils.load_data("data/spelling.json")
-
+    start_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if len(words) == 0:
             imported_word_count = import_excel.import_spelling_words("credentials.json")
             if imported_word_count == 0:
@@ -189,7 +189,7 @@ def run_quiz():
         print("No words practiced.")
 
     # To save the sessions data for progress tracking when more than 10 words are practised
-    utils.save_sessions(total, correct_count, "spelling")
+    utils.save_sessions(total, correct_count, start_time, "spelling")
 
 
 if __name__ == "__main__":

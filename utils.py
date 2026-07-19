@@ -24,27 +24,18 @@ def save_data (data, filepath):
 
 
 #Function to save sessions data to track progress
-def save_sessions(total, correct, app):
+def save_sessions(total, correct, start_time, app):
     if total<10:
         return
     file_name = "data/sessions.json"
     current_entry = {"words_practiced":total,
                      "correct":correct,
                      "app":app,
+                     "start_time":start_time,
                      "date": str(date.today())
                      } 
     
     saved_sessions = load_data(file_name)
-
-    # To upate and save the current session
-    for session in saved_sessions:
-        if session["date"] == str(date.today()):
-            index = saved_sessions.index(session)
-            current_entry["words_practiced"] += session["words_practiced"]
-            current_entry["correct"] += session["correct"]
-            saved_sessions[index] = current_entry
-            save_data(saved_sessions, file_name)
-            return
     
     saved_sessions.append(current_entry)
     save_data(saved_sessions, file_name)

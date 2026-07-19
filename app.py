@@ -3,6 +3,7 @@ import utils
 import import_excel
 import random
 import os
+from datetime import datetime
 import spelling as spelling_quiz
 from dotenv import load_dotenv
 
@@ -32,6 +33,8 @@ def quiz():
     session["mode"] = mode
     session["total"] = session.get("total",0)
     session["correct"] = session.get("correct",0)
+    if "start_time" not in session:
+        session["start_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     words = utils.load_data("data/spelling.json")
     weights = spelling_quiz.get_weights(words)
@@ -68,19 +71,35 @@ def check():
     print(dict(session))
     return render_template("result.html", is_correct = is_correct, correct_word =correct_word)
 
+# Route to clear the session data
+@app.route("/spelling/clear_choice", methods=["POST"])
+def clear_session():
+    user_choice = request.form.get("choice")
+    if user_choice == "current":
+        sessions_data = utils.load_data("data/sessions.json")
+        for index, session_list in enumerate(sessions_data):
+            if session_list["start_time"] == session.get("start_time"):
+                last_session_index = index
+                break
+        
+        sessions_data.pop(last_session_index)
+        utils.save_data(sessions_data,"data/sessions.json")
 
+    if user_choice == "all":
+        utils.save_data([],"data/sessions.json")
+    
+    session.clear()
+    return redirect(url_for("home"))
+        
 
 # Shows the final score when user ends the quiz
 @app.route("/spelling/end_quiz")
 def end_quiz():
     total = session.get("total",0)
     correct = session.get("correct",0)
-    utils.save_sessions(total, correct, "spelling")
-    session.clear()
+    start_time = session.get("start_time")
+    utils.save_sessions(total, correct, start_time, "spelling")
     return render_template("end.html", total=total, correct=correct)
-
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
