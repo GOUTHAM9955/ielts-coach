@@ -1,19 +1,25 @@
 <!doctype html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Result</title>
   </head>
   <body>
-    <h1>Result</h1>
-    {% if is_correct %}
-    <p style="color: green">Correct! Well done</p>
-    {% else %}
-    <p style="color: red">
-      Wrong! The correct spelling is: <strong>{{ correct_word}}</strong>
-    </p>
-    {% endif %}
+    <div class="card">
+      <h1>Result</h1>
+      {% if is_correct %}
+      <p class="correct-text">Correct! Well done</p>
+      {% else %}
+      <p class="wrong-text">
+        Wrong! The correct spelling is: <strong>{{ correct_word}}</strong>
+      </p>
+      {% endif %}
 
-    <a href="/spelling/quiz?mode={{mode}}">Next Word</a>
-    <a href="/spelling/end_quiz">End Quiz</a>
+      <div class="nav-links">
+        <a class="button-link" href="/spelling/quiz?mode={{mode}}">Next Word</a>
+        <a class="button-link" href="/spelling/end_quiz">End Quiz</a>
+      </div>
+    </div>
   </body>
 </html>

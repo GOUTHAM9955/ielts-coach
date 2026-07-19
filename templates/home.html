@@ -1,11 +1,17 @@
 <!doctype html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>IELTS COACH</title>
   </head>
   <body>
-    <h1>Welcome to IELTS Coach</h1>
-    <a href="/spelling">Spelling Practise</a>
-    <a href="/progress">View Progress</a>
+    <div class="card">
+      <h1>Welcome to IELTS Coach</h1>
+      <div class="nav-links">
+        <a class="button-link" href="/spelling">Spelling Practise</a>
+        <a class="button-link" href="/progress">View Progress</a>
+      </div>
+    </div>
   </body>
 </html>

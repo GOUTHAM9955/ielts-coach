@@ -1,29 +1,35 @@
 <!doctype html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Quiz Completed</title>
   </head>
   <body>
-    <h1>Quiz Completed!</h1>
+    <div class="card">
+      <h1>Quiz Completed!</h1>
 
-    <p>Words practised: {{total}}</p>
-    <p>Correct: {{correct}}</p>
+      <p>Words practised: {{total}}</p>
+      <p>Correct: {{correct}}</p>
 
-    {% if total>0 %}
-    <p>Socre: {{(correct/ total *100) | round}}%</p>
-    {% endif %}
+      {% if total>0 %}
+      <p>Score: {{(correct/ total *100) | round}}%</p>
+      {% endif %}
 
-    <form action="/spelling/clear_choice" method="POST">
-      <button type="submit" name="choice" value="current">
-        Clear current sessions data
-      </button>
-      <button type="submit" name="choice" value="all">
-        Clear all sessions data
-      </button>
-      <button type="submit" name="choice" value="keep">Keep it</button>
-    </form>
+      <form action="/spelling/clear_choice" method="POST">
+        <button type="submit" name="choice" value="current">
+          Clear current sessions data
+        </button>
+        <button type="submit" name="choice" value="all">
+          Clear all sessions data
+        </button>
+        <button type="submit" name="choice" value="keep">Keep it</button>
+      </form>
 
-    <a href="/spelling">Practise Again</a>
-    <a href="/">Home</a>
+      <div class="nav-links">
+        <a class="button-link" href="/spelling">Practise Again</a>
+        <a class="button-link" href="/">Home</a>
+      </div>
+    </div>
   </body>
 </html>

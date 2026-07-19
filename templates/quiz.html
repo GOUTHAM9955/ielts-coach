@@ -1,14 +1,18 @@
 <!doctype html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Spelling Quiz</title>
   </head>
   <body>
-    <h1>Spelling Quiz</h1>
-    <form action="/spelling/check" method="POST">
-      <p>Spell this word correctly: <strong>{{entry ["wrong"]}}</strong></p>
-      <input type="text" name="answer" placeholder="Type your answer here" / autocomplete="off">
-      <button type="submit">Check</button>
-    </form>
+    <div class="card">
+      <h1>Spelling Quiz</h1>
+      <form action="/spelling/check" method="POST">
+        <p class="word-prompt">Spell this word correctly: <strong>{{entry ["wrong"]}}</strong></p>
+        <input type="text" name="answer" placeholder="Type your answer here" autocomplete="off">
+        <button type="submit">Check</button>
+      </form>
+    </div>
   </body>
 </html>

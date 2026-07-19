@@ -1,11 +1,17 @@
 <!doctype html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Spelling Practise</title>
   </head>
   <body>
-    <h1>Spelling Practise</h1>
-    <a href="/spelling/quiz?mode=written">Written Test</a>
-    <a href="/spelling/quiz?mode=audio">Audio Quiz</a>
+    <div class="card">
+      <h1>Spelling Practise</h1>
+      <div class="nav-links">
+        <a class="button-link" href="/spelling/quiz?mode=written">Written Test</a>
+        <a class="button-link" href="/spelling/quiz?mode=audio">Audio Quiz</a>
+      </div>
+    </div>
   </body>
 </html>
