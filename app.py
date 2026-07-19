@@ -46,14 +46,28 @@ def check():
     user_answer = request.form.get("answer")
     correct_word = session.get("word")
     mode = session.get("mode")
+    session["total"] = session.get("total",0) + 1
 
+    # Check if the answer is right
     is_correct = spelling_quiz.check_answer_silent(user_answer, correct_word)
 
-    session["total"] = session.get("total",0) + 1
-    if is_correct:
-        session["correct"] = session.get("correct",0) + 1
+
+    # To load spelling.jsonn 
+    spellings = utils.load_data("data/spelling.json")
+
+    #To find the current word in the list of current words 
+    for index, word_list in enumerate(spellings):
+        if word_list["word"] == correct_word:
+            word_index = index
+            break
     
+    # To update and save the spellings file
+    spelling_quiz.update_word(spellings,word_index, is_correct)
+    utils.save_data(spellings,"data/spelling.json")
+    
+    print(dict(session))
     return render_template("result.html", is_correct = is_correct, correct_word =correct_word)
+
 
 
 # Shows the final score when user ends the quiz
@@ -61,6 +75,7 @@ def check():
 def end_quiz():
     total = session.get("total",0)
     correct = session.get("correct",0)
+    utils.save_sessions(total, correct, "spelling")
     session.clear()
     return render_template("end.html", total=total, correct=correct)
 
