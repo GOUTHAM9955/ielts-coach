@@ -5,6 +5,7 @@ import random
 import os
 from datetime import datetime
 import spelling as spelling_quiz
+import reset_data
 from dotenv import load_dotenv
 
 # Load .env file 
@@ -36,6 +37,12 @@ def quiz():
     if "start_time" not in session:
         session["start_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+        # Snapshot spelling.json so "clear current session" can restore this exact state later
+        os.makedirs("data/snapshots", exist_ok=True)
+        snapshot_filename = session["start_time"].replace(" ", "_").replace(":", "-") + ".json"
+        current_spellings = utils.load_data("data/spelling.json")
+        utils.save_data(current_spellings, "data/snapshots/" + snapshot_filename)
+
     words = utils.load_data("data/spelling.json")
     weights = spelling_quiz.get_weights(words)
     entry = random.choices(words, weights=weights, k=1)[0]
@@ -51,9 +58,10 @@ def check():
     mode = session.get("mode")
     session["total"] = session.get("total",0) + 1
 
-    # Check if the answer is right
+    # Check if the answer is right add to correct session value
     is_correct = spelling_quiz.check_answer_silent(user_answer, correct_word)
-
+    if is_correct:
+        session["correct"] = session.get("correct",0) + 1
 
     # To load spelling.jsonn 
     spellings = utils.load_data("data/spelling.json")
@@ -75,19 +83,36 @@ def check():
 @app.route("/spelling/clear_choice", methods=["POST"])
 def clear_session():
     user_choice = request.form.get("choice")
+    start_time = session.get("start_time")
+
+    snapshot_path = None
+    if start_time:
+        snapshot_filename = start_time.replace(" ", "_").replace(":", "-") + ".json"
+        snapshot_path = "data/snapshots/" + snapshot_filename
+
     if user_choice == "current":
         sessions_data = utils.load_data("data/sessions.json")
         for index, session_list in enumerate(sessions_data):
-            if session_list["start_time"] == session.get("start_time"):
+            if session_list["start_time"] == start_time:
                 last_session_index = index
                 break
-        
+
         sessions_data.pop(last_session_index)
         utils.save_data(sessions_data,"data/sessions.json")
 
+        # Restore spelling.json to how it was before this session started
+        if snapshot_path and os.path.exists(snapshot_path):
+            snapshot_data = utils.load_data(snapshot_path)
+            utils.save_data(snapshot_data, "data/spelling.json")
+
     if user_choice == "all":
         utils.save_data([],"data/sessions.json")
-    
+        reset_data.reset_spelling_stats()
+
+    # Snapshot's job is done regardless of choice - clean it up
+    if snapshot_path and os.path.exists(snapshot_path):
+        os.remove(snapshot_path)
+
     session.clear()
     return redirect(url_for("home"))
         
@@ -102,4 +127,4 @@ def end_quiz():
     return render_template("end.html", total=total, correct=correct)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", debug=True)
