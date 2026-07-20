@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ielts-coach
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ielts-coach
+  template:
+    metadata:
+      labels:
+        app: ielts-coach
+    spec:
+      containers:
+        - name: ielts-coach
+          image: ielts-coach:v2
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - secretRef:
+                name: ielts-secrets
